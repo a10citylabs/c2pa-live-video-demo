@@ -3,37 +3,99 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>C2PA Live Segment Verification — dash.js demo</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='4' fill='white'/><text x='8' y='12' font-size='9' font-weight='bold' text-anchor='middle' font-family='sans-serif'>cr</text></svg>">
+    <title>C2PA Live Segment Verification — A10city</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='4' fill='%230d2137'/><text x='8' y='12' font-size='9' font-weight='bold' text-anchor='middle' font-family='sans-serif' fill='%23a4e439'>cr</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f1216;
-            --panel: #171c22;
-            --line: #2a323c;
-            --text: #e8edf2;
-            --dim: #93a1b0;
-            --valid: #2ecc71;
-            --invalid: #e74c3c;
-            --pending: #f1c40f;
+            --navy-deep: #0d2137;
+            --navy-dark: #132d4a;
+            --navy-medium: #1a3a5c;
+            --lime-primary: #a4e439;
+            --lime-light: #c4f06a;
+            --lime-dark: #8bc62e;
+            --white: #ffffff;
+            --gray-200: #cbd5e1;
+            --gray-500: #64748b;
+
+            --bg: var(--navy-deep);
+            --panel: var(--navy-dark);
+            --line: rgba(164, 228, 57, .18);
+            --text: var(--white);
+            --dim: var(--gray-200);
+            --valid: #22c55e;
+            --invalid: #ef4444;
+            --pending: #f59e0b;
         }
         * { box-sizing: border-box; }
         body {
             margin: 0;
-            font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+            font: 15px/1.6 "DM Sans", -apple-system, "Segoe UI", sans-serif;
             background: var(--bg);
             color: var(--text);
         }
-        header {
-            padding: 18px 24px 6px;
+        h1, h2, h3, .nav-brand { font-family: "Space Grotesk", sans-serif; }
+        code, .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; }
+
+        .navbar {
+            background: rgba(13, 33, 55, .95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(12px);
         }
-        header h1 { margin: 0; font-size: 20px; }
-        header p { margin: 4px 0 0; color: var(--dim); font-size: 13px; }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .nav-brand {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -.5px;
+        }
+        .nav-brand span { color: var(--lime-primary); }
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 22px;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-link {
+            color: var(--gray-200);
+            text-decoration: none;
+            font-size: .92rem;
+            font-weight: 500;
+            padding-bottom: 3px;
+            border-bottom: 2px solid transparent;
+            transition: color .2s ease, border-color .2s ease;
+        }
+        .nav-link:hover { color: var(--white); }
+        .nav-link[aria-current="page"] { color: var(--lime-primary); border-color: var(--lime-primary); }
+
+        header.page-header {
+            padding: 22px 24px 6px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header.page-header h1 { margin: 0; font-size: 22px; }
+        header.page-header p.page-subtitle { margin: 6px 0 0; color: var(--dim); font-size: 13.5px; }
+
         main {
             display: grid;
             grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
             gap: 18px;
             padding: 18px 24px 24px;
             max-width: 1200px;
+            margin: 0 auto;
         }
         body.panel-hidden main { grid-template-columns: 1fr; }
         body.panel-hidden aside { display: none; }
@@ -55,7 +117,7 @@
             gap: 8px;
             padding: 6px 10px;
             border-radius: 999px;
-            background: rgba(15, 18, 22, 0.82);
+            background: rgba(13, 33, 55, 0.88);
             border: 1px solid var(--line);
             cursor: pointer;
             user-select: none;
@@ -70,8 +132,8 @@
             border-radius: 6px;
             font-weight: 700;
             font-size: 12px;
-            background: #fff;
-            color: #111;
+            background: var(--lime-primary);
+            color: var(--navy-deep);
         }
         .cr-badge.valid { border-color: var(--valid); }
         .cr-badge.invalid { border-color: var(--invalid); background: rgba(90, 20, 16, .85); }
@@ -87,7 +149,7 @@
             flex: 1;
             height: 18px;
             border-radius: 4px;
-            background: #232a33;
+            background: #1c2634;
             border: 1px solid var(--line);
             font-size: 11px;
             line-height: 16px;
@@ -97,20 +159,39 @@
         .seg.valid { background: #14532d; border-color: var(--valid); }
         .seg.invalid { background: #7f1d1d; border-color: var(--invalid); }
         .seg.verifying { background: #713f12; border-color: var(--pending); }
-        .seg.active { outline: 2px solid #fff; }
+        .seg.active { outline: 2px solid var(--lime-primary); }
 
-        .toolbar { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .toolbar { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
         button {
-            background: #222b35;
+            background: var(--navy-medium);
             color: var(--text);
             border: 1px solid var(--line);
             border-radius: 8px;
             padding: 8px 14px;
-            font-size: 13px;
+            font: 600 13px "DM Sans", sans-serif;
             cursor: pointer;
+            transition: border-color .2s, background .2s, box-shadow .2s;
         }
-        button:hover { border-color: #4a5866; }
-        button.armed { border-color: var(--invalid); color: #ff8d80; }
+        button:hover { border-color: var(--lime-primary); }
+
+        #tamperBtn {
+            background: var(--invalid);
+            border-color: var(--invalid);
+            color: #fff;
+            font-weight: 700;
+            padding: 10px 18px;
+            box-shadow: 0 2px 12px rgba(239, 68, 68, .4);
+        }
+        #tamperBtn:hover { background: #dc2626; border-color: #dc2626; }
+        #tamperBtn.armed {
+            background: #7f1d1d;
+            border-color: #fff;
+            animation: tamper-pulse 1s ease-in-out infinite;
+        }
+        @keyframes tamper-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, .55); }
+            50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+        }
 
         aside {
             background: var(--panel);
@@ -126,9 +207,9 @@
             margin-bottom: 12px;
             border: 1px solid var(--line);
         }
-        .banner.valid { background: rgba(46, 204, 113, .12); border-color: var(--valid); }
-        .banner.invalid { background: rgba(231, 76, 60, .14); border-color: var(--invalid); }
-        .banner.pending { background: rgba(241, 196, 15, .08); }
+        .banner.valid { background: rgba(34, 197, 94, .12); border-color: var(--valid); }
+        .banner.invalid { background: rgba(239, 68, 68, .14); border-color: var(--invalid); }
+        .banner.pending { background: rgba(245, 158, 11, .1); }
         aside h3 {
             margin: 14px 0 6px;
             font-size: 12px;
@@ -139,16 +220,47 @@
         .row { display: flex; gap: 10px; padding: 3px 0; font-size: 13px; }
         .row .k { flex: 0 0 118px; color: var(--dim); }
         .row .v { flex: 1; overflow-wrap: anywhere; }
-        .mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+        .mono { font-size: 12px; }
         .hint { color: var(--dim); font-size: 13px; }
 
-        footer {
-            padding: 0 24px 24px;
-            color: var(--dim);
-            font-size: 12.5px;
-            max-width: 1200px;
+        .site-footer {
+            border-top: 1px solid var(--line);
+            margin-top: 12px;
+            padding: 24px;
         }
-        footer a { color: #7fb4e6; }
+        .footer-container { max-width: 1200px; margin: 0 auto; }
+        .footer-main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+        .footer-main h3 {
+            margin: 0 0 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--lime-primary);
+        }
+        .footer-main p, .footer-main li { color: var(--dim); font-size: 13px; line-height: 1.6; }
+        .footer-main ul { list-style: none; margin: 0; padding: 0; }
+        .footer-main li { margin-bottom: 6px; }
+        .footer-main a { color: var(--gray-200); }
+        .footer-main a:hover { color: var(--lime-primary); }
+        .footer-bottom {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .footer-copyright { color: var(--gray-500); font-size: 12.5px; margin: 0; }
+        .footer-social { display: flex; gap: 14px; }
+        .footer-social a { color: var(--gray-200); display: inline-flex; }
+        .footer-social a:hover { color: var(--lime-primary); }
+        .footer-social svg { width: 18px; height: 18px; fill: currentColor; }
 
         dialog {
             background: var(--panel);
@@ -162,7 +274,7 @@
         dialog pre {
             max-height: 60vh;
             overflow: auto;
-            background: #0d1014;
+            background: #0a1420;
             padding: 12px;
             border-radius: 8px;
             font-size: 12px;
@@ -173,9 +285,20 @@
     </style>
 </head>
 <body>
-    <header>
+    <header class="navbar" role="banner">
+        <nav class="nav-container" aria-label="Main navigation">
+            <a href="https://a10city.com/" class="nav-brand" aria-label="A10city Home">A<span>10</span>city</a>
+            <ul class="nav-menu" role="list">
+                <li><a href="https://a10city.com/" class="nav-link">Home</a></li>
+                <li><a href="https://a10city.com/verify" class="nav-link">C2PA Viewer</a></li>
+                <li><a href="#" class="nav-link" aria-current="page">Live Video Demo</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <header class="page-header">
         <h1>C2PA Live Segment Verification</h1>
-        <p>
+        <p class="page-subtitle">
             Per-segment C2PA manifests (embedded in each fMP4 <code>uuid</code> box) are extracted and
             cryptographically verified while <span id="dashVersion">dash.js</span> plays the stream.
         </p>
@@ -192,7 +315,7 @@
             <div id="segStrip" class="seg-strip"></div>
             <div class="toolbar">
                 <button id="manifestBtn">View manifest / verification JSON</button>
-                <button id="tamperBtn">Tamper next segment</button>
+                <button id="tamperBtn" title="Corrupts one byte of the next segment so the continuity check fails">⚠ Tamper next segment</button>
                 <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/example_c2pa_manifest.json"
                    target="_blank" rel="noopener"><button type="button">Raw example_c2pa_manifest.json</button></a>
             </div>
@@ -204,19 +327,72 @@
         </aside>
     </main>
 
-    <footer>
-        Content: <code>samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method</code> —
-        20 fMP4 segments, each carrying its own C2PA manifest.
-        Verification per <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/C2PA-Live-Segment-Validation.md">C2PA-Live-Segment-Validation.md</a>:
-        AES-128-CBC continuity token over each segment's <code>moof</code>+<code>mdat</code>
-        with an IV chained from the anchor segment.
-    </footer>
-
     <dialog id="manifestDlg">
         <h3 style="margin-top:0">Embedded C2PA manifest (decoded) + verification</h3>
         <pre id="manifestDump"></pre>
         <button id="manifestClose">Close</button>
     </dialog>
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-about">
+                    <h3>About this demo</h3>
+                    <p>
+                        Content: <code>samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method</code> —
+                        20 fMP4 segments, each carrying its own C2PA manifest.
+                        Verification per <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/C2PA-Live-Segment-Validation.md">C2PA-Live-Segment-Validation.md</a>:
+                        AES-128-CBC continuity token over each segment's <code>moof</code>+<code>mdat</code>
+                        with an IV chained from the anchor segment.
+                    </p>
+                </div>
+                <div class="footer-credits">
+                    <h3>Credits</h3>
+                    <ul>
+                        <li>
+                            Live-segment continuity verification is based on Adobe Research's
+                            <a href="https://research.adobe.com/publication/integrating-content-authenticity-with-dash-video-streaming/" target="_blank" rel="noopener">"Integrating Content Authenticity with DASH Video Streaming"</a>.
+                        </li>
+                        <li>
+                            More C2PA-signed sample video segments are available from the
+                            <a href="https://github.com/c2pa-org/public-testfiles" target="_blank" rel="noopener">c2pa-org/public-testfiles</a> repository.
+                        </li>
+                        <li>dash.js is © Dash Industry Forum, BSD-3-Clause — see <a href="LICENSE.md">LICENSE.md</a>.</li>
+                        <li>Sample video shows Big Buck Bunny © Blender Foundation, <a href="https://peach.blender.org/" target="_blank" rel="noopener">bigbuckbunny.org</a> (CC-BY 3.0).</li>
+                    </ul>
+                </div>
+                <nav class="footer-links" aria-label="Quick links">
+                    <h3>Quick Links</h3>
+                    <ul role="list">
+                        <li><a href="https://a10city.com/">A10city Home</a></li>
+                        <li><a href="https://a10city.com/verify">C2PA Viewer</a></li>
+                        <li><a href="https://github.com/a10citylabs/c2pa-live-video-demo" target="_blank" rel="noopener">Source on GitHub</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="footer-copyright">© <time datetime="2026">2026</time> <strong>A10city Private Limited</strong>. All rights reserved.</p>
+                <nav class="footer-social" aria-label="Footer social media links">
+                    <a href="https://x.com/a10city" target="_blank" rel="noopener noreferrer" aria-label="Follow A10city on X (formerly Twitter)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://github.com/a10citylabs" target="_blank" rel="noopener noreferrer" aria-label="View A10city Labs on GitHub">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.207 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.youtube.com/@a10citylabs" target="_blank" rel="noopener noreferrer" aria-label="Subscribe to A10city Labs on YouTube">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </footer>
 
     <script src="lib/dash.all.min.js"></script>
     <script src="js/c2pa.js"></script>

@@ -50,6 +50,13 @@ samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/
 
 Notes on the media: the sample ships bare media segments (no initialization segment), so `m4s/init.mp4` and `stream.mpd` were reconstructed from the bitstream (H.264 Constrained Baseline, 320×180 @ 24 fps, timescale 12288, `avc1.42C01E`). Verification itself never touches the reconstructed files — it runs on the untouched segment bytes. The `mp4/` audio segments embed manifests the same way and verify with the same code, but are not part of playback (their capture window differs from the video's).
 
+## Credits
+
+- The live-segment continuity verification approach is based on Adobe Research's paper
+  [Integrating Content Authenticity with DASH Video Streaming](https://research.adobe.com/publication/integrating-content-authenticity-with-dash-video-streaming/).
+- More C2PA-signed sample video segments for testing are available from the
+  [c2pa-org/public-testfiles](https://github.com/c2pa-org/public-testfiles) repository.
+
 ## Licenses
 
 - dash.js is © Dash Industry Forum, BSD-3-Clause — see [LICENSE.md](LICENSE.md) and [`lib/dash.all.min.js.LICENSE.txt`](lib/dash.all.min.js.LICENSE.txt).
