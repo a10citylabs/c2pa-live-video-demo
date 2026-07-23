@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C2PA Live Segment Verification — dash.js demo</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='4' fill='white'/><text x='8' y='12' font-size='9' font-weight='bold' text-anchor='middle' font-family='sans-serif'>cr</text></svg>">
+    <style>
+        :root {
+            --bg: #0f1216;
+            --panel: #171c22;
+            --line: #2a323c;
+            --text: #e8edf2;
+            --dim: #93a1b0;
+            --valid: #2ecc71;
+            --invalid: #e74c3c;
+            --pending: #f1c40f;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+        header {
+            padding: 18px 24px 6px;
+        }
+        header h1 { margin: 0; font-size: 20px; }
+        header p { margin: 4px 0 0; color: var(--dim); font-size: 13px; }
+        main {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+            gap: 18px;
+            padding: 18px 24px 24px;
+            max-width: 1200px;
+        }
+        body.panel-hidden main { grid-template-columns: 1fr; }
+        body.panel-hidden aside { display: none; }
+
+        .player-wrap { position: relative; }
+        video {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 10px;
+            display: block;
+        }
+        .cr-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(15, 18, 22, 0.82);
+            border: 1px solid var(--line);
+            cursor: pointer;
+            user-select: none;
+            transition: border-color .2s;
+        }
+        .cr-badge .cr-pin {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+            background: #fff;
+            color: #111;
+        }
+        .cr-badge.valid { border-color: var(--valid); }
+        .cr-badge.invalid { border-color: var(--invalid); background: rgba(90, 20, 16, .85); }
+        .cr-badge.verifying { border-color: var(--pending); }
+        .cr-badge span:last-child { font-size: 13px; }
+
+        .seg-strip {
+            display: flex;
+            gap: 3px;
+            margin-top: 10px;
+        }
+        .seg {
+            flex: 1;
+            height: 18px;
+            border-radius: 4px;
+            background: #232a33;
+            border: 1px solid var(--line);
+            font-size: 11px;
+            line-height: 16px;
+            text-align: center;
+            color: #fff;
+        }
+        .seg.valid { background: #14532d; border-color: var(--valid); }
+        .seg.invalid { background: #7f1d1d; border-color: var(--invalid); }
+        .seg.verifying { background: #713f12; border-color: var(--pending); }
+        .seg.active { outline: 2px solid #fff; }
+
+        .toolbar { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+        button {
+            background: #222b35;
+            color: var(--text);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        button:hover { border-color: #4a5866; }
+        button.armed { border-color: var(--invalid); color: #ff8d80; }
+
+        aside {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 14px 16px;
+            align-self: start;
+        }
+        .banner {
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13.5px;
+            margin-bottom: 12px;
+            border: 1px solid var(--line);
+        }
+        .banner.valid { background: rgba(46, 204, 113, .12); border-color: var(--valid); }
+        .banner.invalid { background: rgba(231, 76, 60, .14); border-color: var(--invalid); }
+        .banner.pending { background: rgba(241, 196, 15, .08); }
+        aside h3 {
+            margin: 14px 0 6px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--dim);
+        }
+        .row { display: flex; gap: 10px; padding: 3px 0; font-size: 13px; }
+        .row .k { flex: 0 0 118px; color: var(--dim); }
+        .row .v { flex: 1; overflow-wrap: anywhere; }
+        .mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+        .hint { color: var(--dim); font-size: 13px; }
+
+        footer {
+            padding: 0 24px 24px;
+            color: var(--dim);
+            font-size: 12.5px;
+            max-width: 1200px;
+        }
+        footer a { color: #7fb4e6; }
+
+        dialog {
+            background: var(--panel);
+            color: var(--text);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            max-width: 720px;
+            width: 90vw;
+        }
+        dialog::backdrop { background: rgba(0, 0, 0, .6); }
+        dialog pre {
+            max-height: 60vh;
+            overflow: auto;
+            background: #0d1014;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+        @media (max-width: 900px) {
+            main { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>C2PA Live Segment Verification</h1>
+        <p>
+            Per-segment C2PA manifests (embedded in each fMP4 <code>uuid</code> box) are extracted and
+            cryptographically verified while <span id="dashVersion">dash.js</span> plays the stream.
+        </p>
+    </header>
+
+    <main>
+        <section>
+            <div class="player-wrap">
+                <video id="video" controls muted playsinline></video>
+                <div id="crBadge" class="cr-badge" title="Toggle Content Credentials panel">
+                    <span class="cr-pin">cr</span><span id="crBadgeText">Content Credentials</span>
+                </div>
+            </div>
+            <div id="segStrip" class="seg-strip"></div>
+            <div class="toolbar">
+                <button id="manifestBtn">View manifest / verification JSON</button>
+                <button id="tamperBtn">Tamper next segment</button>
+                <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/example_c2pa_manifest.json"
+                   target="_blank" rel="noopener"><button type="button">Raw example_c2pa_manifest.json</button></a>
+            </div>
+        </section>
+
+        <aside>
+            <div id="statusBanner" class="banner pending">Loading stream…</div>
+            <div id="panelBody"><p class="hint">Segment details appear here once the first segment is fetched.</p></div>
+        </aside>
+    </main>
+
+    <footer>
+        Content: <code>samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method</code> —
+        20 fMP4 segments, each carrying its own C2PA manifest.
+        Verification per <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/C2PA-Live-Segment-Validation.md">C2PA-Live-Segment-Validation.md</a>:
+        AES-128-CBC continuity token over each segment's <code>moof</code>+<code>mdat</code>
+        with an IV chained from the anchor segment.
+    </footer>
+
+    <dialog id="manifestDlg">
+        <h3 style="margin-top:0">Embedded C2PA manifest (decoded) + verification</h3>
+        <pre id="manifestDump"></pre>
+        <button id="manifestClose">Close</button>
+    </dialog>
+
+    <script src="lib/dash.all.min.js"></script>
+    <script src="js/c2pa.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
