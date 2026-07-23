@@ -171,13 +171,38 @@
         container.appendChild(inner);
     }
 
-    function renderFooter(footerId) {
+    // With no active segment (or one that hasn't been live-verified yet)
+    // this reports the static fact that the tree built from the manifest's
+    // own leaf hashes reproduces the manifest's own root — true by
+    // construction. Once a segment has actually been verified against its
+    // *live* bytes (js/merkle.js), that real result (which does catch
+    // tampering) takes over so the footer reflects reality instead.
+    function renderFooter(footerId, liveResult) {
         var footer = document.getElementById(footerId);
         if (!footer) { return; }
-        var ok = state.root === state.manifestRoot;
+        var ok = liveResult ? liveResult.status === 'valid' : state.root === state.manifestRoot;
+        var rootB64 = liveResult ? liveResult.computedRoot : state.root;
         footer.className = 'merkle-tree-footer ' + (ok ? 'ok' : 'bad');
         footer.innerHTML = 'Recomputed root ' + (ok ? 'matches' : 'does NOT match') + ' manifest root: ' +
-            '<span class="mono">' + short(state.root) + '</span>' + (ok ? ' ✓' : ' ✗');
+            '<span class="mono">' + short(rootB64) + '</span>' + (ok ? ' ✓' : ' ✗');
+    }
+
+    // Scales the (fixed pixel-size) tree down with a CSS transform so it
+    // always fits inside its box — no horizontal scrollbar needed, however
+    // many leaves the manifest has.
+    function fitToContainer(containerId) {
+        var container = document.getElementById(containerId);
+        if (!container || !state.layout) { return; }
+        var inner = container.querySelector('.merkle-tree-inner');
+        if (!inner) { return; }
+        var cs = getComputedStyle(container);
+        var padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+        var padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+        var available = container.clientWidth - padX;
+        var scale = available > 0 ? Math.min(1, available / state.layout.width) : 1;
+        inner.style.transform = 'scale(' + scale + ')';
+        inner.style.transformOrigin = 'top left';
+        container.style.height = Math.ceil(state.layout.height * scale + padY) + 'px';
     }
 
     function clearHighlight(container) {
@@ -189,11 +214,14 @@
         });
     }
 
-    function highlight(containerId, stepsId, segmentId, status) {
+    function highlight(containerId, footerId, stepsId, segmentId, liveResult) {
         var container = document.getElementById(containerId);
         var stepsEl = document.getElementById(stepsId);
         if (!container || !state.rows) { return; }
         clearHighlight(container);
+
+        var status = liveResult && liveResult.status;
+        renderFooter(footerId, (status === 'valid' || status === 'invalid') ? liveResult : null);
 
         if (segmentId == null) {
             if (stepsEl) { stepsEl.innerHTML = '<p class="hint">Play or click a segment leaf to see its proof path computed live.</p>'; }
@@ -232,20 +260,15 @@
         var rootNode = container.querySelector('.merkle-node.root');
         if (rootNode) { addClass(rootNode, 'path', statusClass); }
         if (stepsEl) { stepsEl.innerHTML = stepsHtml; }
-
-        var curLeaf = container.querySelector('.merkle-node.leaf.current');
-        if (curLeaf) {
-            var target = curLeaf.offsetLeft - container.clientWidth / 2 + curLeaf.offsetWidth / 2;
-            container.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
-        }
     }
 
     global.C2PAMerkleViz = {
         init: function (containerId, footerId, stepsId) {
             return buildTree().then(function () {
                 render(containerId);
-                renderFooter(footerId);
-                highlight(containerId, stepsId, null);
+                fitToContainer(containerId);
+                highlight(containerId, footerId, stepsId, null, null);
+                window.addEventListener('resize', function () { fitToContainer(containerId); });
             });
         },
         highlight: highlight

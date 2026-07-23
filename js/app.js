@@ -213,7 +213,7 @@
         if (!window.C2PAMerkleViz) { return; }
         var seg = activeSegment || FIRST_SEGMENT;
         var r = results[seg];
-        window.C2PAMerkleViz.highlight('merkleTreeContainer', 'merkleStepsContainer', seg, r && r.merkle && r.merkle.status);
+        window.C2PAMerkleViz.highlight('merkleTreeContainer', 'merkleTreeFooter', 'merkleStepsContainer', seg, r && r.merkle);
     }
 
     function updateTamperButton() {
