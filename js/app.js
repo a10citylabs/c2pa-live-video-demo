@@ -185,7 +185,7 @@
 
     function updateTamperButton() {
         var btn = el('tamperBtn');
-        btn.textContent = tamperNext ? 'Tampering next segment…' : 'Tamper next segment';
+        btn.textContent = tamperNext ? '⚠ Tampering next segment…' : '⚠ Tamper next segment';
         btn.classList.toggle('armed', tamperNext);
     }
 
