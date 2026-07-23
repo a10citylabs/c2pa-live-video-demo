@@ -25,6 +25,10 @@
     }).catch(function () { /* merkle panel section stays empty */ });
     var activeSegment = null;
     var player;
+    var merkleVizReady = window.C2PAMerkleViz ?
+        window.C2PAMerkleViz.init('merkleTreeContainer', 'merkleTreeFooter', 'merkleStepsContainer').then(function () {
+            renderMerkleViz();
+        }) : Promise.resolve();
 
     /* ---------------------------------------------------------------- *
      *  Verification plumbing
@@ -202,6 +206,14 @@
             html += field('Reconstructed root', mono(mk.computedRoot) + (mk.status === 'valid' ? ' ✓' : ' ✖'));
         }
         body.innerHTML = html || '<p class="hint">Segment details appear here once the first segment is fetched.</p>';
+        renderMerkleViz();
+    }
+
+    function renderMerkleViz() {
+        if (!window.C2PAMerkleViz) { return; }
+        var seg = activeSegment || FIRST_SEGMENT;
+        var r = results[seg];
+        window.C2PAMerkleViz.highlight('merkleTreeContainer', 'merkleStepsContainer', seg, r && r.merkle && r.merkle.status);
     }
 
     function updateTamperButton() {

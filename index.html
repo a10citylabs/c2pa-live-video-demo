@@ -57,6 +57,22 @@
             <div id="panelBody"><p class="hint">Segment details appear here once the first segment is fetched.</p></div>
         </aside>
 
+        <section class="merkle-viz-section">
+            <h2>Merkle tree construction (live)</h2>
+            <p class="merkle-viz-desc">
+                All 20 segment leaf hashes from <code>video_merkle_manifest.json</code> are recomputed in the
+                browser and combined level by level, using the same
+                <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/Merkle-Proof-Video-Segment-Validation.md">construction/proof algorithm</a>
+                (<code>js/merkle-core.js</code>) that verifies each segment. As the stream plays, the path from the
+                current segment's leaf up to the root — and the sibling hashes consumed along the way — is
+                highlighted, with each <code>H(left ‖ right)</code> combination step listed below. Click any leaf
+                to jump the player to that segment.
+            </p>
+            <div id="merkleTreeContainer" class="merkle-tree-wrap"></div>
+            <div id="merkleTreeFooter" class="merkle-tree-footer"></div>
+            <div id="merkleStepsContainer" class="merkle-steps"><p class="hint">Loading tree…</p></div>
+        </section>
+
         <section class="page-info">
             <div class="page-info-about">
                 <h2>About this demo</h2>
@@ -152,6 +168,7 @@
     <script src="js/c2pa.js"></script>
     <script src="js/merkle-core.js"></script>
     <script src="js/merkle.js"></script>
+    <script src="js/merkle-tree-viz.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
