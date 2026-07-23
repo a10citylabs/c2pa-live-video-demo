@@ -300,6 +300,7 @@ aside {
 
 .merkle-viz-section {
     grid-column: 1 / -1;
+    min-width: 0;
     margin-top: 6px;
     padding-top: 18px;
     border-top: 1px solid var(--line);
@@ -325,7 +326,7 @@ aside {
     border: 1px solid var(--line);
     border-radius: 10px;
     padding: 16px;
-    overflow-x: auto;
+    overflow: hidden;
 }
 .merkle-tree-inner { position: relative; }
 .merkle-tree-svg { position: absolute; top: 0; left: 0; overflow: visible; }
