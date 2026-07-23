@@ -1,194 +1,56 @@
+# C2PA Live Segment Verification Demo
 
-<img src="https://cloud.githubusercontent.com/assets/2762250/7824984/985c3e76-03bc-11e5-807b-1402bde4fe56.png" width="400">
+A minimal web demo that plays a DASH stream with [dash.js](https://github.com/Dash-Industry-Forum/dash.js) **v5.2.0** (latest release) and cryptographically verifies the **C2PA manifest embedded in every media segment** while it plays, showing a *Content Credentials* overlay with the live verification state.
 
-Build status (CircleCI): [![CircleCI](https://circleci.com/gh/Dash-Industry-Forum/dash.js/tree/development.svg?style=svg)](https://circleci.com/gh/Dash-Industry-Forum/dash.js/tree/development)
+The content is the sample in
+[`samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method`](samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method):
+20 fMP4 video segments, each carrying its own C2PA manifest store (JUMBF) in a top-level `uuid` box, plus the decoded reference manifest [`example_c2pa_manifest.json`](samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/example_c2pa_manifest.json).
 
-[Join #dashjs on Slack!](https://join.slack.com/t/dashif/shared_invite/zt-egme869x-JH~UPUuLoKJB26fw7wj3Gg)
+## Run it
 
-## Migration from v3.x to v4.0
-If you are migrating from dash.js v3.x to dash.js v4.x please read the migration document found [here](https://github.com/Dash-Industry-Forum/dash.js/wiki/Migration-to-dash.js-4.0).
-
-## Overview
-A reference client implementation for the playback of MPEG DASH via JavaScript and [compliant browsers](http://caniuse.com/#feat=mediasource). Learn more about DASH IF Reference Client on our [wiki](https://github.com/Dash-Industry-Forum/dash.js/wiki).
-
-If your intent is to use the player code without contributing back to this project, then use the MASTER branch which holds the approved and stable public releases.
-
-If your goal is to improve or extend the code and contribute back to this project, then you should make your changes in, and submit a pull request against, the DEVELOPMENT branch. Read our [CONTRIBUTION.md](https://github.com/Dash-Industry-Forum/dash.js/blob/development/CONTRIBUTING.md) file for a walk-through of the contribution process.
-
-All new work should be in the development branch. Master is now reserved for tagged builds.
-
-## Demo and reference players
-All these reference builds and minified files are available under both http and https.
-
-### Samples
-Multiple [dash.js samples](https://reference.dashif.org/dash.js/latest/samples/index.html) covering a wide set of common use cases.
-
-### Reference players
-The released [pre-built reference players ](http://reference.dashif.org/dash.js/) if you want direct access without writing any Javascript.
-
-The [nightly build of the /dev branch reference player](http://reference.dashif.org/dash.js/nightly/samples/dash-if-reference-player/index.html), is pre-release but contains the latest fixes. It is a good place to start if you are debugging playback problems.
-
-
-### CDN hosted files
-The latest minified files have been hosted on a global CDN and are free to use in production:
-
-- [dash.all.min.js](http://cdn.dashjs.org/latest/dash.all.min.js)
-- [dash.all.debug.js](http://cdn.dashjs.org/latest/dash.all.debug.js)
-
-In addition, all the releases are available under the following urls. Replace "vx.x.x" with the release version, for instance "v3.1.0".
-
-- [http://cdn.dashjs.org/vx.x.x/dash.all.min.js](http://cdn.dashjs.org/v3.1.0/dash.all.min.js)
-- [http://cdn.dashjs.org/vx.x.x/dash.all.debug.js](http://cdn.dashjs.org/v3.1.0/dash.all.debug.js)
-
-
-
-## Documentation
-Full [API Documentation](http://cdn.dashjs.org/latest/jsdoc/module-MediaPlayer.html) is available describing all public methods, interfaces, properties, and events.
-
-For help, join our [Slack channel](https://dashif-slack.azurewebsites.net), our [email list](https://groups.google.com/d/forum/dashjs) and read our [wiki](https://github.com/Dash-Industry-Forum/dash.js/wiki).
-
-## Tutorials
-
-Detailed information on specific topics can be found in our tutorials:
-
-* [Low latency streaming](https://github.com/Dash-Industry-Forum/dash.js/wiki/Low-Latency-streaming)
-* [UTCTiming Clock synchronization](https://github.com/Dash-Industry-Forum/dash.js/wiki/UTCTiming---Clock-synchronization)
-* [Digital Rights Management (DRM) and license acquisition](https://github.com/Dash-Industry-Forum/dash.js/wiki/Digital-Rights-Management-(DRM)-and-license-acquisition)
-* [Buffer and scheduling logic](https://github.com/Dash-Industry-Forum/dash.js/wiki/Buffer-and-Scheduling-Logic)
-
-## Getting Started
-
-The standard setup method uses javascript to initialize and provide video details to dash.js. `MediaPlayerFactory` provides an alternative declarative setup syntax.
-
-### Standard Setup
-
-Create a video element somewhere in your html. For our purposes, make sure the controls attribute is present.
-```html
-<video id="videoPlayer" controls></video>
-```
-Add dash.all.min.js to the end of the body.
-```html
-<body>
-  ...
-  <script src="yourPathToDash/dash.all.min.js"></script>
-</body>
-```
-Now comes the good stuff. We need to create a MediaPlayer and initialize it.
-``` js
-
-var url = "https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd";
-var player = dashjs.MediaPlayer().create();
-player.initialize(document.querySelector("#videoPlayer"), url, true);
-
+```sh
+npm install && npm start          # http-server on http://localhost:8000
+# or, with no install at all:
+python3 -m http.server 8000
 ```
 
-When it is all done, it should look similar to this:
-```html
-<!doctype html>
-<html>
-    <head>
-        <title>Dash.js Rocks</title>
-        <style>
-            video {
-                width: 640px;
-                height: 360px;
-            }
-        </style>
-    </head>
-    <body>
-        <div>
-            <video id="videoPlayer" controls></video>
-        </div>
-        <script src="yourPathToDash/dash.all.min.js"></script>
-        <script>
-            (function(){
-                var url = "https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd";
-                var player = dashjs.MediaPlayer().create();
-                player.initialize(document.querySelector("#videoPlayer"), url, true);
-            })();
-        </script>
-    </body>
-</html>
-```
+Open <http://localhost:8000/> in any browser with H.264 playback (Chrome, Edge, Firefox, Safari). The page also works when hosted statically (e.g. GitHub Pages).
 
-### Module Setup
+## What happens
 
-We publish dash.js to [npm](https://www.npmjs.com/package/dashjs). Examples of how to use dash.js in different module
-bundlers can be found in the [`samples/modules`](https://github.com/Dash-Industry-Forum/dash.js/tree/development/samples/modules) directory.
+1. dash.js 5.2.0 (vendored in [`lib/`](lib), pinned in `package.json`) plays [`stream.mpd`](samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/stream.mpd).
+2. A dash.js **response interceptor** hands every media segment's bytes to [`js/c2pa.js`](js/c2pa.js) before they reach the media pipeline.
+3. For each segment, following [`C2PA-Live-Segment-Validation.md`](samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/C2PA-Live-Segment-Validation.md):
+   - the C2PA manifest store is extracted from the segment's `uuid` box (JUMBF + CBOR parsing, no external libraries);
+   - the `c2pa.IVHASH` assertion yields `segmentId`, `anchorSegmentIndex`, `streamIdHash`, `certHash` and the expected `continuityToken`;
+   - the per-segment IV is derived from the anchor segment — `sha256(streamIdHash + anchorNumber)[0..16]`, incremented once per segment after the anchor;
+   - the segment's `moof`+`mdat` bytes are AES-128-CBC encrypted (key = first 16 chars of `certHash`, WebCrypto) and the last ciphertext block, base64-encoded, is compared against the `continuityToken`.
+4. The **Content Credentials overlay** (the `cr` badge on the video) reflects the segment currently playing: signer (from the COSE `x5chain` certificate), claim generator, author, assertion list, expected vs. computed token, derived IV and timing. The strip under the player shows the state of all 20 segments.
 
-### MediaPlayerFactory Setup
+### Demo controls
 
-An alternative way to build a Dash.js player in your web page is to use the MediaPlayerFactory.  The MediaPlayerFactory will automatically instantiate and initialize the MediaPlayer module on appropriately tagged video elements.
+- **`cr` badge** — toggles the Content Credentials panel.
+- **View manifest / verification JSON** — decoded embedded manifest + verification result of the current segment.
+- **Tamper next segment** — flips one byte in the next fetched segment's `mdat` so the continuity check fails; the overlay and segment strip turn red. (When the reference `example_c2pa_manifest.json` segment `803366` plays, the panel also cross-checks it against the embedded manifest.)
 
-Create a video element somewhere in your html and provide the path to your `mpd` file as src. Also ensure that your video element has the `data-dashjs-player` attribute on it.
-```html
-<video data-dashjs-player autoplay src="https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd" controls>
-</video>
+## Repository layout
 
 ```
-
-Add dash.all.min.js to the end of the body.
-```html
-<body>
-  ...
-  <script src="yourPathToDash/dash.all.min.js"></script>
-</body>
+index.html      demo page (UI + overlay)
+js/c2pa.js      ISO-BMFF/JUMBF/CBOR parsing + continuity-token verification (WebCrypto)
+js/app.js       dash.js wiring, interceptor, overlay rendering
+lib/            dash.js 5.2.0 UMD build (vendored; `npm run sync-dashjs` refreshes it)
+samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/
+  ├── C2PA-Live-Segment-Validation.md   verification method documentation
+  ├── example_c2pa_manifest.json        decoded reference manifest (segment 803366)
+  ├── stream.mpd                        DASH manifest for the sample segments
+  ├── m4s/                              video segments 803347–803366 + init.mp4
+  └── mp4/                              audio-track segments (same embedded-manifest method)
 ```
 
-When it is all done, it should look similar to this:
-```html
-<!doctype html>
-<html>
-    <head>
-        <title>Dash.js Rocks</title>
-        <style>
-            video {
-                width: 640px;
-                height: 360px;
-            }
-        </style>
-    </head>
-    <body>
-        <div>
-            <video data-dashjs-player autoplay src="https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd" controls>
-            </video>
-        </div>
-        <script src="yourPathToDash/dash.all.min.js"></script>
-    </body>
-</html>
-```
+Notes on the media: the sample ships bare media segments (no initialization segment), so `m4s/init.mp4` and `stream.mpd` were reconstructed from the bitstream (H.264 Constrained Baseline, 320×180 @ 24 fps, timescale 12288, `avc1.42C01E`). Verification itself never touches the reconstructed files — it runs on the untouched segment bytes. The `mp4/` audio segments embed manifests the same way and verify with the same code, but are not part of playback (their capture window differs from the video's).
 
-## Quick Start for Developers
+## Licenses
 
-1. Install Core Dependencies
-    * [install nodejs](http://nodejs.org/)
-2. Checkout project repository (default branch: development)
-    * ```git clone https://github.com/Dash-Industry-Forum/dash.js.git```
-3. Install dependencies
-    * ```npm install```
-4. Build, watch file changes and launch samples page, which has links that point to reference player and to other examples (basic examples, captioning, ads, live, etc).
-    * ```npm run start```
-
-
-### Other Tasks to Build / Run Tests on Commandline.
-
-* Build distribution files (minification included)
-    * ```npm run build```
-* Build and watch distribution files 
-    * ```npm run dev```
-* Run linter on source files (linter is also applied when building files)
-    * ```npm run lint```
-* Run unit tests
-    * ```npm run test```
-* Generate API jsdoc
-    * ```npm run doc```
-    
-### Troubleshooting
-* In case the build process is failing make sure to use an up-to-date node.js version. The build process was successfully tested with node.js version 14.16.1.
-
-### License
-dash.js is released under [BSD license](https://github.com/Dash-Industry-Forum/dash.js/blob/development/LICENSE.md)
-
-### Tested With
-
-[<img src="https://cloud.githubusercontent.com/assets/7864462/12837037/452a17c6-cb73-11e5-9f39-fc96893bc9bf.png" alt="Browser Stack Logo" width="300">](https://www.browserstack.com/)
+- dash.js is © Dash Industry Forum, BSD-3-Clause — see [LICENSE.md](LICENSE.md) and [`lib/dash.all.min.js.LICENSE.txt`](lib/dash.all.min.js.LICENSE.txt).
+- The sample video content shows Big Buck Bunny © Blender Foundation, [bigbuckbunny.org](https://peach.blender.org/) (CC-BY 3.0).

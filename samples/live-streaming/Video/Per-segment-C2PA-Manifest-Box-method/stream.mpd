@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MPD xmlns="urn:mpeg:dash:schema:mpd:2011"
+     profiles="urn:mpeg:dash:profile:isoff-live:2011"
+     type="static"
+     mediaPresentationDuration="PT208.334S"
+     minBufferTime="PT10.5S">
+    <Period id="1" start="PT0S">
+        <AdaptationSet contentType="video" mimeType="video/mp4" segmentAlignment="true" par="16:9">
+            <Representation id="video" codecs="avc1.42C01E" width="320" height="180" frameRate="24" sar="1:1" bandwidth="550000">
+                <SegmentTemplate timescale="12288"
+                                 media="m4s/seg_$Number$.m4s"
+                                 initialization="m4s/init.mp4"
+                                 startNumber="803347"
+                                 duration="128000"
+                                 presentationTimeOffset="102828416000"/>
+            </Representation>
+        </AdaptationSet>
+    </Period>
+</MPD>
