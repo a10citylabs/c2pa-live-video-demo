@@ -54,6 +54,34 @@
             <div id="statusBanner" class="banner pending">Loading stream…</div>
             <div id="panelBody"><p class="hint">Segment details appear here once the first segment is fetched.</p></div>
         </aside>
+
+        <section class="page-info">
+            <div class="page-info-about">
+                <h2>About this demo</h2>
+                <p>
+                    Content: <code>samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method</code> —
+                    20 fMP4 segments, each carrying its own C2PA manifest.
+                    Verification per <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/C2PA-Live-Segment-Validation.md">C2PA-Live-Segment-Validation.md</a>:
+                    AES-128-CBC continuity token over each segment's <code>moof</code>+<code>mdat</code>
+                    with an IV chained from the anchor segment.
+                </p>
+            </div>
+            <div class="page-info-credits">
+                <h2>Credits</h2>
+                <ul>
+                    <li>
+                        Live-segment continuity verification is based on Adobe Research's
+                        <a href="https://research.adobe.com/publication/integrating-content-authenticity-with-dash-video-streaming/" target="_blank" rel="noopener">"Integrating Content Authenticity with DASH Video Streaming"</a>.
+                    </li>
+                    <li>
+                        More C2PA-signed sample video segments are available from the
+                        <a href="https://github.com/c2pa-org/public-testfiles" target="_blank" rel="noopener">c2pa-org/public-testfiles</a> repository.
+                    </li>
+                    <li>dash.js is © Dash Industry Forum, BSD-3-Clause — see <a href="LICENSE.md">LICENSE.md</a>.</li>
+                    <li>Sample video shows Big Buck Bunny © Blender Foundation, <a href="https://peach.blender.org/" target="_blank" rel="noopener">bigbuckbunny.org</a> (CC-BY 3.0).</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <dialog id="manifestDlg">
@@ -74,31 +102,6 @@
                     <div class="footer-email">
                         <a href="mailto:info@a10city.com" aria-label="Send email to info@a10city.com">info@a10city.com</a>
                     </div>
-                </div>
-                <div class="footer-about">
-                    <h3>About this demo</h3>
-                    <p>
-                        Content: <code>samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method</code> —
-                        20 fMP4 segments, each carrying its own C2PA manifest.
-                        Verification per <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/C2PA-Live-Segment-Validation.md">C2PA-Live-Segment-Validation.md</a>:
-                        AES-128-CBC continuity token over each segment's <code>moof</code>+<code>mdat</code>
-                        with an IV chained from the anchor segment.
-                    </p>
-                </div>
-                <div class="footer-credits">
-                    <h3>Credits</h3>
-                    <ul>
-                        <li>
-                            Live-segment continuity verification is based on Adobe Research's
-                            <a href="https://research.adobe.com/publication/integrating-content-authenticity-with-dash-video-streaming/" target="_blank" rel="noopener">"Integrating Content Authenticity with DASH Video Streaming"</a>.
-                        </li>
-                        <li>
-                            More C2PA-signed sample video segments are available from the
-                            <a href="https://github.com/c2pa-org/public-testfiles" target="_blank" rel="noopener">c2pa-org/public-testfiles</a> repository.
-                        </li>
-                        <li>dash.js is © Dash Industry Forum, BSD-3-Clause — see <a href="LICENSE.md">LICENSE.md</a>.</li>
-                        <li>Sample video shows Big Buck Bunny © Blender Foundation, <a href="https://peach.blender.org/" target="_blank" rel="noopener">bigbuckbunny.org</a> (CC-BY 3.0).</li>
-                    </ul>
                 </div>
                 <nav class="footer-links" aria-label="Quick links">
                     <h3>Quick Links</h3>

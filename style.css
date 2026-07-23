@@ -168,6 +168,7 @@ code, .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, mono
    ============================================ */
 
 header.page-header {
+    width: 100%;
     padding: 22px 24px 6px;
     max-width: var(--content-max-width);
     margin: 0 auto;
@@ -292,6 +293,34 @@ aside {
     padding: 14px 16px;
     align-self: start;
 }
+
+/* ============================================
+   Page Info (About this demo / Credits)
+   ============================================ */
+
+.page-info {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 6px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+}
+.page-info h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--dim);
+    margin-bottom: 8px;
+}
+.page-info p,
+.page-info li { color: var(--dim); font-size: 13.5px; line-height: 1.6; }
+.page-info ul { list-style: none; }
+.page-info li { margin-bottom: 6px; }
+.page-info a { color: var(--gray-200); }
+.page-info a:hover,
+.page-info a:focus { color: var(--lime-primary); }
 .banner {
     border-radius: 8px;
     padding: 10px 12px;
