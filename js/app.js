@@ -8,6 +8,7 @@
     var SAMPLE_BASE = 'samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/';
     var MPD_URL = new URL(SAMPLE_BASE + 'stream.mpd', window.location.href).href;
     var MANIFEST_JSON_URL = SAMPLE_BASE + 'example_c2pa_manifest.json';
+    var MERKLE_MANIFEST_URL = SAMPLE_BASE + 'video_merkle_manifest.json';
     var FIRST_SEGMENT = 803347;
     var LAST_SEGMENT = 803366;
     var SEGMENT_DURATION = 128000 / 12288; // seconds
@@ -18,6 +19,10 @@
     var results = {};          // segmentId -> verification result
     var tamperNext = false;
     var exampleManifestParams = null;
+    var merkleManifest = null;
+    var merkleManifestReady = C2PAMerkle.loadManifest(MERKLE_MANIFEST_URL).then(function (json) {
+        merkleManifest = json;
+    }).catch(function () { /* merkle panel section stays empty */ });
     var activeSegment = null;
     var player;
 
@@ -59,7 +64,14 @@
             updateTamperButton();
         }
         setResult(segmentId, { status: 'verifying', tampered: tampered });
-        return C2PA.verifySegment(u8).then(function (result) {
+        return Promise.all([
+            C2PA.verifySegment(u8),
+            merkleManifestReady.then(function () {
+                return merkleManifest ? C2PAMerkle.verifySegment(merkleManifest, segmentId, u8) : null;
+            })
+        ]).then(function (both) {
+            var result = both[0];
+            result.merkle = both[1];
             result.tampered = tampered;
             result.verifiedAt = new Date();
             setResult(segmentId, result);
@@ -180,6 +192,15 @@
                 html += field('example_c2pa_manifest.json', match ? 'matches embedded manifest ✓' : 'differs from embedded manifest');
             }
         }
+        if (r && r.merkle && r.merkle.status !== 'no-proof') {
+            var mk = r.merkle;
+            html += '<h3>Segment integrity (C2PA Merkle tree, §9.2.3 / A.5.4)</h3>';
+            html += field('Leaf location', mono(mk.location) + ' of ' + merkleManifest.bmffHashAssertion.merkle[0].count);
+            html += field('Leaf hash', mono(mk.leafHash));
+            html += field('Proof length', mk.proofLength + ' sibling hash(es)');
+            html += field('Expected root', mono(mk.expectedRoot));
+            html += field('Reconstructed root', mono(mk.computedRoot) + (mk.status === 'valid' ? ' ✓' : ' ✖'));
+        }
         body.innerHTML = html || '<p class="hint">Segment details appear here once the first segment is fetched.</p>';
     }
 
@@ -222,6 +243,14 @@
                 expectedContinuityToken: r.expected,
                 computedContinuityToken: r.computed,
                 derivedIv: r.iv
+            } : 'pending',
+            merkleVerification: r && r.merkle ? {
+                status: r.merkle.status,
+                location: r.merkle.location,
+                leafHash: r.merkle.leafHash,
+                proofLength: r.merkle.proofLength,
+                expectedRoot: r.merkle.expectedRoot,
+                computedRoot: r.merkle.computedRoot
             } : 'pending',
             manifest: r && r.manifest ? {
                 claim: r.manifest.claim && {

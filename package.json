@@ -5,7 +5,9 @@
     "license": "BSD-3-Clause",
     "scripts": {
         "start": "http-server -p 8000 -c-1 .",
-        "sync-dashjs": "cp node_modules/dashjs/dist/modern/umd/dash.all.min.js lib/dash.all.min.js && cp node_modules/dashjs/dist/modern/umd/dash.all.min.js.LICENSE.txt lib/"
+        "sync-dashjs": "cp node_modules/dashjs/dist/modern/umd/dash.all.min.js lib/dash.all.min.js && cp node_modules/dashjs/dist/modern/umd/dash.all.min.js.LICENSE.txt lib/",
+        "build-merkle-manifest": "node scripts/build-merkle-manifest.js",
+        "verify-merkle-manifest": "node scripts/verify-merkle-manifest.js"
     },
     "dependencies": {
         "dashjs": "5.2.0"

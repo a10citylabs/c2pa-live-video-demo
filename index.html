@@ -47,6 +47,8 @@
                 <button id="tamperBtn" title="Corrupts one byte of the next segment so the continuity check fails">⚠ Tamper next segment</button>
                 <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/example_c2pa_manifest.json"
                    target="_blank" rel="noopener"><button type="button">Raw example_c2pa_manifest.json</button></a>
+                <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/video_merkle_manifest.json"
+                   target="_blank" rel="noopener"><button type="button">Raw video_merkle_manifest.json</button></a>
             </div>
         </section>
 
@@ -63,7 +65,10 @@
                     20 fMP4 segments, each carrying its own C2PA manifest.
                     Verification per <a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/C2PA-Live-Segment-Validation.md">C2PA-Live-Segment-Validation.md</a>:
                     AES-128-CBC continuity token over each segment's <code>moof</code>+<code>mdat</code>
-                    with an IV chained from the anchor segment.
+                    with an IV chained from the anchor segment. Each segment is also checked against a
+                    C2PA-spec Merkle tree (<a href="samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/Merkle-Proof-Video-Segment-Validation.md">Merkle-Proof-Video-Segment-Validation.md</a>,
+                    C2PA 2.4 §9.2.3 / Appendix A.5.4): its leaf hash is walked up through a per-segment
+                    proof and compared against the root in <code>video_merkle_manifest.json</code>.
                 </p>
             </div>
             <div class="page-info-credits">
@@ -145,6 +150,8 @@
 
     <script src="lib/dash.all.min.js"></script>
     <script src="js/c2pa.js"></script>
+    <script src="js/merkle-core.js"></script>
+    <script src="js/merkle.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

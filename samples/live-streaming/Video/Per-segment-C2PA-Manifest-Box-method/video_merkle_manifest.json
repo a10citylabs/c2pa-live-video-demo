@@ -1,0 +1,380 @@
+{
+  "specReference": "C2PA Technical Specification 2.4, Section 9.2.3 (Hashing a BMFF-formatted asset) and Appendix A.5.4 (Auxiliary c2pa Boxes for Large and Fragmented Files)",
+  "generatedAt": "2026-07-23T11:08:19.218Z",
+  "asset": {
+    "initSegment": "m4s/init.mp4",
+    "track": "video",
+    "trackId": 1,
+    "segmentCount": 20
+  },
+  "bmffHashAssertion": {
+    "label": "c2pa.hash.bmff.v3",
+    "alg": "sha256",
+    "merkle": [
+      {
+        "uniqueId": 1,
+        "localId": 1,
+        "count": 20,
+        "alg": "sha256",
+        "initHash": "W1vYr/aYeotAIbnXW+Da69LHBnR6yvFKBRAgkmaL0Q8=",
+        "hashes": [
+          "lkM65vVsxcUGGnQikOj+ZyhAuHyRCIZAwoPsfGP3Bgc="
+        ]
+      }
+    ]
+  },
+  "segments": [
+    {
+      "segmentId": 803347,
+      "file": "m4s/seg_803347.m4s",
+      "location": 0,
+      "leafHash": "/nB1uXz8+cGQfIq+tOu0da14apXxI4iTLlGbzlAoB2U=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 0,
+        "hashes": [
+          "W+LovoAsloOA01QI6gLFYDYdyIpddm+T5hlDHB2qNb4=",
+          "wXNIIAWmobHSvr8TPA9JvK6HXcWaZMw+k45L+k49d6Y=",
+          "obmvPlN8b+x41aUPp/rgeHac6hAs5X4ypm/9aizhZLA=",
+          "67OE3BtRHlSqaZfukYGnUandqYe/y0CcdrEAvKmy8qc=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803348,
+      "file": "m4s/seg_803348.m4s",
+      "location": 1,
+      "leafHash": "W+LovoAsloOA01QI6gLFYDYdyIpddm+T5hlDHB2qNb4=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 1,
+        "hashes": [
+          "/nB1uXz8+cGQfIq+tOu0da14apXxI4iTLlGbzlAoB2U=",
+          "wXNIIAWmobHSvr8TPA9JvK6HXcWaZMw+k45L+k49d6Y=",
+          "obmvPlN8b+x41aUPp/rgeHac6hAs5X4ypm/9aizhZLA=",
+          "67OE3BtRHlSqaZfukYGnUandqYe/y0CcdrEAvKmy8qc=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803349,
+      "file": "m4s/seg_803349.m4s",
+      "location": 2,
+      "leafHash": "JWp47bDNbHAH4GN8joCWPOptsyc/Z/oskpvgVAAMaTo=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 2,
+        "hashes": [
+          "ptujuOTvzpvuUR+fyveI1yda+gscjoiB4nGu4/6HRAg=",
+          "z8ZyhZWYHdgue7rVozFeN2A0XyKEa0ni2azvmj451rw=",
+          "obmvPlN8b+x41aUPp/rgeHac6hAs5X4ypm/9aizhZLA=",
+          "67OE3BtRHlSqaZfukYGnUandqYe/y0CcdrEAvKmy8qc=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803350,
+      "file": "m4s/seg_803350.m4s",
+      "location": 3,
+      "leafHash": "ptujuOTvzpvuUR+fyveI1yda+gscjoiB4nGu4/6HRAg=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 3,
+        "hashes": [
+          "JWp47bDNbHAH4GN8joCWPOptsyc/Z/oskpvgVAAMaTo=",
+          "z8ZyhZWYHdgue7rVozFeN2A0XyKEa0ni2azvmj451rw=",
+          "obmvPlN8b+x41aUPp/rgeHac6hAs5X4ypm/9aizhZLA=",
+          "67OE3BtRHlSqaZfukYGnUandqYe/y0CcdrEAvKmy8qc=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803351,
+      "file": "m4s/seg_803351.m4s",
+      "location": 4,
+      "leafHash": "VETCR6ubB/6Hik2Ua5/mUHiv0jS+TVE8LWKjxh/PTnM=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 4,
+        "hashes": [
+          "lRDJBozxUhd10OVGUl6bDGMDysdzQyP3HFzLzKF7s5M=",
+          "3liLyykzg4qmyV2uYqyrteihY7d11j1rcoPL2kaugYs=",
+          "4hNnE8pTYs9a8eimBrkPgZ/HDgcFqkh6uX/DECgy4uU=",
+          "67OE3BtRHlSqaZfukYGnUandqYe/y0CcdrEAvKmy8qc=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803352,
+      "file": "m4s/seg_803352.m4s",
+      "location": 5,
+      "leafHash": "lRDJBozxUhd10OVGUl6bDGMDysdzQyP3HFzLzKF7s5M=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 5,
+        "hashes": [
+          "VETCR6ubB/6Hik2Ua5/mUHiv0jS+TVE8LWKjxh/PTnM=",
+          "3liLyykzg4qmyV2uYqyrteihY7d11j1rcoPL2kaugYs=",
+          "4hNnE8pTYs9a8eimBrkPgZ/HDgcFqkh6uX/DECgy4uU=",
+          "67OE3BtRHlSqaZfukYGnUandqYe/y0CcdrEAvKmy8qc=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803353,
+      "file": "m4s/seg_803353.m4s",
+      "location": 6,
+      "leafHash": "MV6iVsKUR1XBL/k/prycOrciOnrgQvk/7/jwdqj5KHY=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 6,
+        "hashes": [
+          "S4XKeqHlCnu48sJseyQNbAgdNy50BvOT/BJ0IOQATlk=",
+          "QamCe4pJnrNFkBVZOmammbHy111Vus1bXU3dQTNe52s=",
+          "4hNnE8pTYs9a8eimBrkPgZ/HDgcFqkh6uX/DECgy4uU=",
+          "67OE3BtRHlSqaZfukYGnUandqYe/y0CcdrEAvKmy8qc=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803354,
+      "file": "m4s/seg_803354.m4s",
+      "location": 7,
+      "leafHash": "S4XKeqHlCnu48sJseyQNbAgdNy50BvOT/BJ0IOQATlk=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 7,
+        "hashes": [
+          "MV6iVsKUR1XBL/k/prycOrciOnrgQvk/7/jwdqj5KHY=",
+          "QamCe4pJnrNFkBVZOmammbHy111Vus1bXU3dQTNe52s=",
+          "4hNnE8pTYs9a8eimBrkPgZ/HDgcFqkh6uX/DECgy4uU=",
+          "67OE3BtRHlSqaZfukYGnUandqYe/y0CcdrEAvKmy8qc=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803355,
+      "file": "m4s/seg_803355.m4s",
+      "location": 8,
+      "leafHash": "nKOpOlV7YipuCZ/s2zO3fsFQMY/U9qM91e1Z3lmOwEA=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 8,
+        "hashes": [
+          "cVzSoCDZM6hm107Of1SlVfdAz+xrEmIwENwFRkwVE58=",
+          "+0Re7t9Fnc0WUCv++1yEOChrQnEqmRTlGmKhMwPANfo=",
+          "s7EuHXMMReh7unQ7UNpy7/blU9j901O71MIyEbmGwRs=",
+          "M367/A1/ON6mhUU5tufrmK7NOXOWyCGeVQfEJzJPC+g=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803356,
+      "file": "m4s/seg_803356.m4s",
+      "location": 9,
+      "leafHash": "cVzSoCDZM6hm107Of1SlVfdAz+xrEmIwENwFRkwVE58=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 9,
+        "hashes": [
+          "nKOpOlV7YipuCZ/s2zO3fsFQMY/U9qM91e1Z3lmOwEA=",
+          "+0Re7t9Fnc0WUCv++1yEOChrQnEqmRTlGmKhMwPANfo=",
+          "s7EuHXMMReh7unQ7UNpy7/blU9j901O71MIyEbmGwRs=",
+          "M367/A1/ON6mhUU5tufrmK7NOXOWyCGeVQfEJzJPC+g=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803357,
+      "file": "m4s/seg_803357.m4s",
+      "location": 10,
+      "leafHash": "Tng5N6G4uSLq3XOCmcIMP9ibIWIS3o3P9m4Arebmqjc=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 10,
+        "hashes": [
+          "j34csZ+Q9zK2N4BYvItCTBEc+4NF+cIjsMk/DF4P6a4=",
+          "4VIDr8NRXObtF4f6fBEjejwjP9nTZDURwdi/3aYxRK4=",
+          "s7EuHXMMReh7unQ7UNpy7/blU9j901O71MIyEbmGwRs=",
+          "M367/A1/ON6mhUU5tufrmK7NOXOWyCGeVQfEJzJPC+g=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803358,
+      "file": "m4s/seg_803358.m4s",
+      "location": 11,
+      "leafHash": "j34csZ+Q9zK2N4BYvItCTBEc+4NF+cIjsMk/DF4P6a4=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 11,
+        "hashes": [
+          "Tng5N6G4uSLq3XOCmcIMP9ibIWIS3o3P9m4Arebmqjc=",
+          "4VIDr8NRXObtF4f6fBEjejwjP9nTZDURwdi/3aYxRK4=",
+          "s7EuHXMMReh7unQ7UNpy7/blU9j901O71MIyEbmGwRs=",
+          "M367/A1/ON6mhUU5tufrmK7NOXOWyCGeVQfEJzJPC+g=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803359,
+      "file": "m4s/seg_803359.m4s",
+      "location": 12,
+      "leafHash": "tnRd4jczGkOL4Doe19cTrQ9R8QtSMUR7p8KUBR2a8hE=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 12,
+        "hashes": [
+          "MdMa1ut7K9RcpFyfVA/vmJppogKlu0j/cFDkaRcTHwE=",
+          "SH50sMj+rSlV41Ut9qdmzw2/7CW/4SMQgFYWCo85GWM=",
+          "HOky3sxXcmv3NI1YwabTtZrm6fumTWMtDnxtT5GTOHc=",
+          "M367/A1/ON6mhUU5tufrmK7NOXOWyCGeVQfEJzJPC+g=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803360,
+      "file": "m4s/seg_803360.m4s",
+      "location": 13,
+      "leafHash": "MdMa1ut7K9RcpFyfVA/vmJppogKlu0j/cFDkaRcTHwE=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 13,
+        "hashes": [
+          "tnRd4jczGkOL4Doe19cTrQ9R8QtSMUR7p8KUBR2a8hE=",
+          "SH50sMj+rSlV41Ut9qdmzw2/7CW/4SMQgFYWCo85GWM=",
+          "HOky3sxXcmv3NI1YwabTtZrm6fumTWMtDnxtT5GTOHc=",
+          "M367/A1/ON6mhUU5tufrmK7NOXOWyCGeVQfEJzJPC+g=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803361,
+      "file": "m4s/seg_803361.m4s",
+      "location": 14,
+      "leafHash": "MV6Wzclo1GRLSdVkgcsdwZFQVAojnqfKJ7Y1W9yxWx8=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 14,
+        "hashes": [
+          "DZ6VwdSNWGd2MzRLbPkJdMk0N3eMieY5+b7qoEoobYg=",
+          "3GigbzACFq2HGN59+zzPDoTeRm/Feq5z8i/t8K5FPqw=",
+          "HOky3sxXcmv3NI1YwabTtZrm6fumTWMtDnxtT5GTOHc=",
+          "M367/A1/ON6mhUU5tufrmK7NOXOWyCGeVQfEJzJPC+g=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803362,
+      "file": "m4s/seg_803362.m4s",
+      "location": 15,
+      "leafHash": "DZ6VwdSNWGd2MzRLbPkJdMk0N3eMieY5+b7qoEoobYg=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 15,
+        "hashes": [
+          "MV6Wzclo1GRLSdVkgcsdwZFQVAojnqfKJ7Y1W9yxWx8=",
+          "3GigbzACFq2HGN59+zzPDoTeRm/Feq5z8i/t8K5FPqw=",
+          "HOky3sxXcmv3NI1YwabTtZrm6fumTWMtDnxtT5GTOHc=",
+          "M367/A1/ON6mhUU5tufrmK7NOXOWyCGeVQfEJzJPC+g=",
+          "9Kx9sTDNadY5KBHzmwdR6aDPMu8vWjwOxwT+i2ErokQ="
+        ]
+      }
+    },
+    {
+      "segmentId": 803363,
+      "file": "m4s/seg_803363.m4s",
+      "location": 16,
+      "leafHash": "nkyyFLf1PA0jPrU2qLXoe+4gmQIX+oWO0Jj6G3MGvmE=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 16,
+        "hashes": [
+          "9Y0fq5AsxWhF1XlwqlMwQitp3YlGz8VqFOu0d450Jeo=",
+          "v7hrJITc6lkGj3suo2oDA7eDqOTcBMaKyypXZSG72G0=",
+          "gmINxpEIndcoKJQLrf2BZh+KYpu4CSlRiJZ7MZ1mBNw="
+        ]
+      }
+    },
+    {
+      "segmentId": 803364,
+      "file": "m4s/seg_803364.m4s",
+      "location": 17,
+      "leafHash": "9Y0fq5AsxWhF1XlwqlMwQitp3YlGz8VqFOu0d450Jeo=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 17,
+        "hashes": [
+          "nkyyFLf1PA0jPrU2qLXoe+4gmQIX+oWO0Jj6G3MGvmE=",
+          "v7hrJITc6lkGj3suo2oDA7eDqOTcBMaKyypXZSG72G0=",
+          "gmINxpEIndcoKJQLrf2BZh+KYpu4CSlRiJZ7MZ1mBNw="
+        ]
+      }
+    },
+    {
+      "segmentId": 803365,
+      "file": "m4s/seg_803365.m4s",
+      "location": 18,
+      "leafHash": "Vn8Kbgavm2xRIwkGZdmQUYho8uf9Fa4NkBnwzed7aOU=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 18,
+        "hashes": [
+          "1pKUzqPzITCdZOdKdyfyO6dKGLulMAkyoCRbV0xG824=",
+          "evSlnh6rXGh2zhiJpCzrw9dcGdl/tBxtqghXBhCdjC8=",
+          "gmINxpEIndcoKJQLrf2BZh+KYpu4CSlRiJZ7MZ1mBNw="
+        ]
+      }
+    },
+    {
+      "segmentId": 803366,
+      "file": "m4s/seg_803366.m4s",
+      "location": 19,
+      "leafHash": "1pKUzqPzITCdZOdKdyfyO6dKGLulMAkyoCRbV0xG824=",
+      "bmffMerkleMap": {
+        "uniqueId": 1,
+        "localId": 1,
+        "location": 19,
+        "hashes": [
+          "Vn8Kbgavm2xRIwkGZdmQUYho8uf9Fa4NkBnwzed7aOU=",
+          "evSlnh6rXGh2zhiJpCzrw9dcGdl/tBxtqghXBhCdjC8=",
+          "gmINxpEIndcoKJQLrf2BZh+KYpu4CSlRiJZ7MZ1mBNw="
+        ]
+      }
+    }
+  ]
+}
