@@ -4,290 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>C2PA Live Segment Verification — A10city</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='4' fill='%230d2137'/><text x='8' y='12' font-size='9' font-weight='bold' text-anchor='middle' font-family='sans-serif' fill='%23a4e439'>cr</text></svg>">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="apple-touch-icon" href="img/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy-deep: #0d2137;
-            --navy-dark: #132d4a;
-            --navy-medium: #1a3a5c;
-            --lime-primary: #a4e439;
-            --lime-light: #c4f06a;
-            --lime-dark: #8bc62e;
-            --white: #ffffff;
-            --gray-200: #cbd5e1;
-            --gray-500: #64748b;
-
-            --bg: var(--navy-deep);
-            --panel: var(--navy-dark);
-            --line: rgba(164, 228, 57, .18);
-            --text: var(--white);
-            --dim: var(--gray-200);
-            --valid: #22c55e;
-            --invalid: #ef4444;
-            --pending: #f59e0b;
-        }
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font: 15px/1.6 "DM Sans", -apple-system, "Segoe UI", sans-serif;
-            background: var(--bg);
-            color: var(--text);
-        }
-        h1, h2, h3, .nav-brand { font-family: "Space Grotesk", sans-serif; }
-        code, .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; }
-
-        .navbar {
-            background: rgba(13, 33, 55, .95);
-            border-bottom: 1px solid var(--line);
-            backdrop-filter: blur(12px);
-        }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 14px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .nav-brand {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--white);
-            text-decoration: none;
-            letter-spacing: -.5px;
-        }
-        .nav-brand span { color: var(--lime-primary); }
-        .nav-menu {
-            list-style: none;
-            display: flex;
-            gap: 22px;
-            margin: 0;
-            padding: 0;
-        }
-        .nav-link {
-            color: var(--gray-200);
-            text-decoration: none;
-            font-size: .92rem;
-            font-weight: 500;
-            padding-bottom: 3px;
-            border-bottom: 2px solid transparent;
-            transition: color .2s ease, border-color .2s ease;
-        }
-        .nav-link:hover { color: var(--white); }
-        .nav-link[aria-current="page"] { color: var(--lime-primary); border-color: var(--lime-primary); }
-
-        header.page-header {
-            padding: 22px 24px 6px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        header.page-header h1 { margin: 0; font-size: 22px; }
-        header.page-header p.page-subtitle { margin: 6px 0 0; color: var(--dim); font-size: 13.5px; }
-
-        main {
-            display: grid;
-            grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
-            gap: 18px;
-            padding: 18px 24px 24px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        body.panel-hidden main { grid-template-columns: 1fr; }
-        body.panel-hidden aside { display: none; }
-
-        .player-wrap { position: relative; }
-        video {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #000;
-            border-radius: 10px;
-            display: block;
-        }
-        .cr-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 10px;
-            border-radius: 999px;
-            background: rgba(13, 33, 55, 0.88);
-            border: 1px solid var(--line);
-            cursor: pointer;
-            user-select: none;
-            transition: border-color .2s;
-        }
-        .cr-badge .cr-pin {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 22px;
-            height: 22px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 12px;
-            background: var(--lime-primary);
-            color: var(--navy-deep);
-        }
-        .cr-badge.valid { border-color: var(--valid); }
-        .cr-badge.invalid { border-color: var(--invalid); background: rgba(90, 20, 16, .85); }
-        .cr-badge.verifying { border-color: var(--pending); }
-        .cr-badge span:last-child { font-size: 13px; }
-
-        .seg-strip {
-            display: flex;
-            gap: 3px;
-            margin-top: 10px;
-        }
-        .seg {
-            flex: 1;
-            height: 18px;
-            border-radius: 4px;
-            background: #1c2634;
-            border: 1px solid var(--line);
-            font-size: 11px;
-            line-height: 16px;
-            text-align: center;
-            color: #fff;
-        }
-        .seg.valid { background: #14532d; border-color: var(--valid); }
-        .seg.invalid { background: #7f1d1d; border-color: var(--invalid); }
-        .seg.verifying { background: #713f12; border-color: var(--pending); }
-        .seg.active { outline: 2px solid var(--lime-primary); }
-
-        .toolbar { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-        button {
-            background: var(--navy-medium);
-            color: var(--text);
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 8px 14px;
-            font: 600 13px "DM Sans", sans-serif;
-            cursor: pointer;
-            transition: border-color .2s, background .2s, box-shadow .2s;
-        }
-        button:hover { border-color: var(--lime-primary); }
-
-        #tamperBtn {
-            background: var(--invalid);
-            border-color: var(--invalid);
-            color: #fff;
-            font-weight: 700;
-            padding: 10px 18px;
-            box-shadow: 0 2px 12px rgba(239, 68, 68, .4);
-        }
-        #tamperBtn:hover { background: #dc2626; border-color: #dc2626; }
-        #tamperBtn.armed {
-            background: #7f1d1d;
-            border-color: #fff;
-            animation: tamper-pulse 1s ease-in-out infinite;
-        }
-        @keyframes tamper-pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, .55); }
-            50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-        }
-
-        aside {
-            background: var(--panel);
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            padding: 14px 16px;
-            align-self: start;
-        }
-        .banner {
-            border-radius: 8px;
-            padding: 10px 12px;
-            font-size: 13.5px;
-            margin-bottom: 12px;
-            border: 1px solid var(--line);
-        }
-        .banner.valid { background: rgba(34, 197, 94, .12); border-color: var(--valid); }
-        .banner.invalid { background: rgba(239, 68, 68, .14); border-color: var(--invalid); }
-        .banner.pending { background: rgba(245, 158, 11, .1); }
-        aside h3 {
-            margin: 14px 0 6px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            color: var(--dim);
-        }
-        .row { display: flex; gap: 10px; padding: 3px 0; font-size: 13px; }
-        .row .k { flex: 0 0 118px; color: var(--dim); }
-        .row .v { flex: 1; overflow-wrap: anywhere; }
-        .mono { font-size: 12px; }
-        .hint { color: var(--dim); font-size: 13px; }
-
-        .site-footer {
-            border-top: 1px solid var(--line);
-            margin-top: 12px;
-            padding: 24px;
-        }
-        .footer-container { max-width: 1200px; margin: 0 auto; }
-        .footer-main {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 24px;
-        }
-        .footer-main h3 {
-            margin: 0 0 10px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            color: var(--lime-primary);
-        }
-        .footer-main p, .footer-main li { color: var(--dim); font-size: 13px; line-height: 1.6; }
-        .footer-main ul { list-style: none; margin: 0; padding: 0; }
-        .footer-main li { margin-bottom: 6px; }
-        .footer-main a { color: var(--gray-200); }
-        .footer-main a:hover { color: var(--lime-primary); }
-        .footer-bottom {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid var(--line);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .footer-copyright { color: var(--gray-500); font-size: 12.5px; margin: 0; }
-        .footer-social { display: flex; gap: 14px; }
-        .footer-social a { color: var(--gray-200); display: inline-flex; }
-        .footer-social a:hover { color: var(--lime-primary); }
-        .footer-social svg { width: 18px; height: 18px; fill: currentColor; }
-
-        dialog {
-            background: var(--panel);
-            color: var(--text);
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            max-width: 720px;
-            width: 90vw;
-        }
-        dialog::backdrop { background: rgba(0, 0, 0, .6); }
-        dialog pre {
-            max-height: 60vh;
-            overflow: auto;
-            background: #0a1420;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 12px;
-        }
-        @media (max-width: 900px) {
-            main { grid-template-columns: 1fr; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="navbar" role="banner">
         <nav class="nav-container" aria-label="Main navigation">
-            <a href="https://a10city.com/" class="nav-brand" aria-label="A10city Home">A<span>10</span>city</a>
+            <a href="https://a10city.com/" class="nav-brand" aria-label="A10city Home">
+                <img src="img/A10city-horizontal-nofill.png" alt="A10city" class="nav-logo">
+            </a>
             <ul class="nav-menu" role="list">
                 <li><a href="https://a10city.com/" class="nav-link">Home</a></li>
                 <li><a href="https://a10city.com/verify" class="nav-link">C2PA Viewer</a></li>
@@ -336,6 +65,16 @@
     <footer class="site-footer" role="contentinfo">
         <div class="footer-container">
             <div class="footer-main">
+                <div class="footer-company">
+                    <h2>A10city Private Limited</h2>
+                    <div class="cin-container">
+                        <span class="cin-label" id="cin-label">CIN</span>
+                        <span class="cin-value" aria-labelledby="cin-label">U62013TS2025PTC208121</span>
+                    </div>
+                    <div class="footer-email">
+                        <a href="mailto:info@a10city.com" aria-label="Send email to info@a10city.com">info@a10city.com</a>
+                    </div>
+                </div>
                 <div class="footer-about">
                     <h3>About this demo</h3>
                     <p>
@@ -367,6 +106,13 @@
                         <li><a href="https://a10city.com/">A10city Home</a></li>
                         <li><a href="https://a10city.com/verify">C2PA Viewer</a></li>
                         <li><a href="https://github.com/a10citylabs/c2pa-live-video-demo" target="_blank" rel="noopener">Source on GitHub</a></li>
+                    </ul>
+                </nav>
+                <nav class="footer-legal" aria-label="Legal information">
+                    <h3>Legal</h3>
+                    <ul role="list">
+                        <li><a href="https://a10city.com/privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="https://a10city.com/terms-of-service.html">Terms of Service</a></li>
                     </ul>
                 </nav>
             </div>
