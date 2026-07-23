@@ -6,6 +6,8 @@ The content is the sample in
 [`samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method`](samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method):
 20 fMP4 video segments, each carrying its own C2PA manifest store (JUMBF) in a top-level `uuid` box, plus the decoded reference manifest [`example_c2pa_manifest.json`](samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/example_c2pa_manifest.json).
 
+Every segment is checked two ways: the embedded manifest's custom continuity-token scheme (below), and a second, independent check against a real **C2PA Merkle tree** built over the same 20 segments — see [`Merkle-Proof-Video-Segment-Validation.md`](samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/Merkle-Proof-Video-Segment-Validation.md).
+
 ## Run it
 
 ```sh
@@ -25,7 +27,11 @@ Open <http://localhost:8000/> in any browser with H.264 playback (Chrome, Edge, 
    - the `c2pa.IVHASH` assertion yields `segmentId`, `anchorSegmentIndex`, `streamIdHash`, `certHash` and the expected `continuityToken`;
    - the per-segment IV is derived from the anchor segment — `sha256(streamIdHash + anchorNumber)[0..16]`, incremented once per segment after the anchor;
    - the segment's `moof`+`mdat` bytes are AES-128-CBC encrypted (key = first 16 chars of `certHash`, WebCrypto) and the last ciphertext block, base64-encoded, is compared against the `continuityToken`.
-4. The **Content Credentials overlay** (the `cr` badge on the video) reflects the segment currently playing: signer (from the COSE `x5chain` certificate), claim generator, author, assertion list, expected vs. computed token, derived IV and timing. The strip under the player shows the state of all 20 segments.
+4. In parallel, following [`Merkle-Proof-Video-Segment-Validation.md`](samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/Merkle-Proof-Video-Segment-Validation.md) ([`js/merkle-core.js`](js/merkle-core.js) + [`js/merkle.js`](js/merkle.js)):
+   - the segment's leaf hash is recomputed (the whole file minus its C2PA `uuid` box, per C2PA 2.4 Appendix A.5.4);
+   - it's looked up by `segmentId` in [`video_merkle_manifest.json`](samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/video_merkle_manifest.json) to get its Merkle proof (`location` + ordered sibling hashes);
+   - the leaf hash is walked up through the proof and compared against the root stored in the manifest.
+5. The **Content Credentials overlay** (the `cr` badge on the video) reflects the segment currently playing: signer (from the COSE `x5chain` certificate), claim generator, author, assertion list, expected vs. computed continuity token, derived IV, Merkle proof length and reconstructed root, and timing. The strip under the player shows the state of all 20 segments.
 
 ### Demo controls
 
@@ -37,15 +43,22 @@ Open <http://localhost:8000/> in any browser with H.264 playback (Chrome, Edge, 
 
 ```
 index.html      demo page (UI + overlay)
-js/c2pa.js      ISO-BMFF/JUMBF/CBOR parsing + continuity-token verification (WebCrypto)
+js/c2pa.js         ISO-BMFF/JUMBF/CBOR parsing + continuity-token verification (WebCrypto)
+js/merkle-core.js  Merkle tree/proof math (box exclusion, tree build, proof build/verify) — no crypto, shared by browser + Node
+js/merkle.js       browser wrapper around merkle-core.js (WebCrypto)
 js/app.js       dash.js wiring, interceptor, overlay rendering
 lib/            dash.js 5.2.0 UMD build (vendored; `npm run sync-dashjs` refreshes it)
+scripts/
+  ├── build-merkle-manifest.js   (re)generates video_merkle_manifest.json (`npm run build-merkle-manifest`)
+  └── verify-merkle-manifest.js  standalone Node self-test incl. a tamper check (`npm run verify-merkle-manifest`)
 samples/live-streaming/Video/Per-segment-C2PA-Manifest-Box-method/
-  ├── C2PA-Live-Segment-Validation.md   verification method documentation
-  ├── example_c2pa_manifest.json        decoded reference manifest (segment 803366)
-  ├── stream.mpd                        DASH manifest for the sample segments
-  ├── m4s/                              video segments 803347–803366 + init.mp4
-  └── mp4/                              audio-track segments (same embedded-manifest method)
+  ├── C2PA-Live-Segment-Validation.md            continuity-token verification method documentation
+  ├── Merkle-Proof-Video-Segment-Validation.md   Merkle-tree verification method documentation
+  ├── example_c2pa_manifest.json                 decoded reference manifest (segment 803366)
+  ├── video_merkle_manifest.json                 generated Merkle tree + per-segment proofs
+  ├── stream.mpd                                 DASH manifest for the sample segments
+  ├── m4s/                                        video segments 803347–803366 + init.mp4
+  └── mp4/                                        audio-track segments (same embedded-manifest method)
 ```
 
 Notes on the media: the sample ships bare media segments (no initialization segment), so `m4s/init.mp4` and `stream.mpd` were reconstructed from the bitstream (H.264 Constrained Baseline, 320×180 @ 24 fps, timescale 12288, `avc1.42C01E`). Verification itself never touches the reconstructed files — it runs on the untouched segment bytes. The `mp4/` audio segments embed manifests the same way and verify with the same code, but are not part of playback (their capture window differs from the video's).
